@@ -32,7 +32,6 @@ class Modifier
     input = Sorter.new(input) #refactor sorted
     input = input.sort
 
-    # aaaa returns enumerator
     input_enumerator = lazy_read(input)
 
     combiner = Combiner.new do |value|
