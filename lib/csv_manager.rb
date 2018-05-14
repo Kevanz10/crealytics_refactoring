@@ -41,4 +41,12 @@ class CsvManager
       file_index += 1
     end
   end
+
+  def self.lazy_read(file)
+    Enumerator.new do |yielder|
+      CSV.foreach(file, DEFAULT_CSV_OPTIONS) do |row|
+        yielder.yield(row)
+      end
+    end
+  end
 end

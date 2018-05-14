@@ -1,22 +1,12 @@
 require_relative 'lib/combiner'
 require_relative 'lib/file_getter'
 require_relative 'lib/sorter'
-
-class String
-  def from_german_to_f
-    self.gsub(',', '.').to_f
-  end
-end
-
-class Float
-  def to_german_s
-    self.to_s.gsub('.', ',')
-  end
-end
+require_relative 'lib/string'
+require_relative 'lib/string'
+require_relative 'lib/float'
 
 class Modifier
-  DEFAULT_CSV_OPTIONS = { :col_sep => "\t", :headers => :first_row }
-
+  
   KEYWORD_UNIQUE_ID = 'Keyword Unique ID'
   LAST_VALUE_WINS = ['Account ID', 'Account Name', 'Campaign', 'Ad Group', 'Keyword', 'Keyword Type', 'Subid', 'Paused', 'Max CPC', 'Keyword Unique ID', 'ACCOUNT', 'CAMPAIGN', 'BRAND', 'BRAND+CATEGORY', 'ADGROUP', 'KEYWORD']
   LAST_REAL_VALUE_WINS = ['Last Avg CPC', 'Last Avg Pos']
@@ -29,10 +19,10 @@ class Modifier
   end
 
   def modify(input)
-    input = Sorter.new(input) #refactor sorted
+    input = Sorter.new(input)
     input = input.sort
 
-    input_enumerator = lazy_read(input)
+    input_enumerator = CsvManager.lazy_read(input)
 
     combiner = Combiner.new do |value|
       value[KEYWORD_UNIQUE_ID]
@@ -106,14 +96,6 @@ class Modifier
       end
     end
     result
-  end
-
-  def lazy_read(file)
-    Enumerator.new do |yielder|
-      CSV.foreach(file, DEFAULT_CSV_OPTIONS) do |row|
-        yielder.yield(row)
-      end
-    end
   end
 end
 

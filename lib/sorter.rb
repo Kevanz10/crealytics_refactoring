@@ -15,7 +15,7 @@ class Sorter
   end
 
   def sorter_by_column(column)
-    index_of_key = @content.headers.index(column) # busca la columna clicks 
+    index_of_key = @content.headers.index(column) # search columns by clicks 
     @content.sort_by { |a| -a[index_of_key].to_i }
   end
 end
